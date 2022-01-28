@@ -1,5 +1,5 @@
 <template>
-    <div class="side-bar col-lg-3 side">
+    <div class="side-bar col-lg-9 side">
         <div class="search-bar w3layouts-newsletter">
             <h3 class="sear-head editContent">Поиск</h3>
             <form action="#" method="post" class="d-flex">

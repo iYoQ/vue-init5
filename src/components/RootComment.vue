@@ -13,30 +13,18 @@
                 </form>
             </div>
         </div>
-        <div class="media py-5 comments" v-for="comment in comments" :key="comment.id">
-            <img :src="comment.avatar" class="mr-3 img-fluid" alt=""/>
-            <div class="media-body mt-4">
-                <h5 class="mt-0 editContent">{{ comment.author }}</h5>
-                <p class="mt-2 editContent">{{ comment.content }}</p>
-                <a href="#formComment" @click="addParent(comment.id)">Ответить</a>
-                <div class="media mt-5 editContent" v-for="child in comment.children" :key="child.id">
-                    <a class="pr-3" href="#">
-                        <img :src="comment.avatar" class="img-fluid" alt=""/>
-                    </a>
-                    <div class="media-body">
-                        <h5 class="mt-0 editContent">{{ child.author }}</h5>
-                        <p class="mt-2 editContent">{{ child.content }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <RecComment :comment="comment" v-for="comment in comments" :key="comment.id"/>
     </div>
 </template>
 
 <script>
+import RecComment from "./RecComment";
 export default {
-    name: "Comment",
+    name: "RootComment",
     props: ['comments', 'article'],
+    components: {
+        RecComment
+    },
     data() {
         return {
             content: '',
@@ -58,12 +46,9 @@ export default {
                 body: JSON.stringify(data)
             }
             ).then((response) => {
-                this.$emit('reLoad')
+                this.$emit('re-load')
                 this.clearForm()
             })
-        },
-        addParent(id) {
-            this.parent = id
         },
         clearForm() {
             this.content = ''
@@ -75,7 +60,5 @@ export default {
 </script>
 
 <style scoped>
-    .comments {
-        width: 100%;
-    }
+   
 </style>

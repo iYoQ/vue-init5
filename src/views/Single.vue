@@ -48,10 +48,11 @@
                         </p>
                     </div>
                     <hr />
-                    <Comment />
+                    <!-- <Comment :comments="article.comments" :article="article.id" @reload="loadArticle" /> -->
+                    <RootComment :comments="article.comments" :article="article.id" @reload="loadArticle" />
                 </div>
                 <div class="container-fluid py-md-4">
-                        <SideBar />
+                    <SideBar />
                 </div> 
             </div>
         </div>
@@ -59,12 +60,13 @@
 </template>
 
 <script>
+import RootComment from "../components/RootComment"
 import Comment from "../components/Comment";
 import SideBar from "../components/SideBar"
 export default {
     name: "Single",
     props: ['id'],
-    components: {Comment, SideBar},
+    components: {Comment, SideBar, RootComment},
     data() {
         return {
             article: {},
@@ -98,6 +100,6 @@ export default {
 }
 .side {
     position: sticky;
-    top: 5%;
+    top: 11%;
 }
 </style>
