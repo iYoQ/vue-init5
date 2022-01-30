@@ -28,18 +28,7 @@ export default {
     created() {
         this.loadTopListArticles();
     },
-    watch: {
-        '$route'(to, from){
-            console.log(to)
-            console.log(from)
-            }
-        },
     methods: {
-        async loadListArticles() {
-            this.listArticles = await fetch(
-                `${this.$store.getters.getServerUrl}/articles`
-            ).then((response) => response.json());
-        },
         async loadTopListArticles() {
             this.listTopArticles = await fetch(
                 `${this.$store.getters.getServerUrl}/articles/top`
@@ -49,7 +38,7 @@ export default {
         goTo(id) {
             this.$router.push({ name: "Single", params: {id: id} })
         },
-    }
+    },
 };
 </script>
 
@@ -57,6 +46,7 @@ export default {
     .side {
         position: sticky;
         right: 0;
+        top: 10%;
     }
 
 </style>

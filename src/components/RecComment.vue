@@ -1,6 +1,6 @@
 <template>
     <div class="media py-5 comments">
-        <img :src="comment.avatar" class="mr-3 img-fluid" alt=""/>
+        <img :src="comment.avatar" class="mr-3 img-fluid" alt="" height="75" width="75"/>
         <div class="media-body mt-4">
             <div class="d-flex">
                 <h5 class="mt-0 editContent">{{ comment.author }}</h5>
@@ -8,7 +8,7 @@
             </div>
             <p class="mt-2 editContent">{{ comment.content }}</p>
             <a href="#formComment" @click="addParent(comment.id)">Ответить</a>
-            <RecComment v-for="child in comment.children" v-bind:comment="child" :key="child.id" />
+            <RecComment v-for="child in comment.children" v-bind:comment="child" :key="child.id" @addParent="addParent"/>
         </div>
     </div>
 </template>
@@ -19,13 +19,13 @@ export default {
     props: ['comment'],
     data() {
         return {
-            content: "",
+            content: null,
             parent: null,
         };
     },
     methods: {
         addParent(id) {
-            this.parent = id;
+            this.$emit('addParent', id)
         },
     },
 };

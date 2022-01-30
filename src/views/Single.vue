@@ -42,14 +42,13 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="row sub-para-w3layouts mt-5">
+                    <div class="sub-para-w3layouts mt-5">
                         <p class="editContent">
-                            {{ article.content }}
+                            <span class="content">{{ article.content }}</span>
                         </p>
                     </div>
                     <hr />
-                    <!-- <Comment :comments="article.comments" :article="article.id" @reload="loadArticle" /> -->
-                    <RootComment :comments="article.comments" :article="article.id" @reload="loadArticle" />
+                    <RootComment :comments="article.comments" :article="article.id" @reload_page="loadArticle" />
                 </div>
                 <div class="container-fluid py-md-4">
                     <SideBar />
@@ -61,12 +60,11 @@
 
 <script>
 import RootComment from "../components/RootComment"
-import Comment from "../components/Comment";
 import SideBar from "../components/SideBar"
 export default {
     name: "Single",
     props: ['id'],
-    components: {Comment, SideBar, RootComment},
+    components: {SideBar, RootComment},
     data() {
         return {
             article: {},
@@ -82,6 +80,10 @@ export default {
             ).then((response) => response.json())
         },
     },
+    beforeRouteUpdate(to, from, next) {
+        this.loadArticle()
+        next()
+    }
 };
 </script>
 
@@ -102,4 +104,5 @@ export default {
     position: sticky;
     top: 11%;
 }
+
 </style>

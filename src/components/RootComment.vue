@@ -13,7 +13,7 @@
                 </form>
             </div>
         </div>
-        <RecComment :comment="comment" v-for="comment in comments" :key="comment.id"/>
+        <RecComment :comment="comment" v-for="comment in comments" :key="comment.id" @addParent="addParent"/>
     </div>
 </template>
 
@@ -37,22 +37,26 @@ export default {
                 content: this.content,
                 parent: this.parent
             }
-            fetch(`${this.$store.getters.getServerUrl}/articles/${this.article}/comments/`,
+            await fetch(`${this.$store.getters.getServerUrl}/articles/${this.article}/comments/`,
             {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
                 },
                 body: JSON.stringify(data)
             }
             ).then((response) => {
-                this.$emit('re-load')
                 this.clearForm()
+                this.$emit('reload_page')
             })
         },
         clearForm() {
             this.content = ''
             this.parent = null
+        },
+        addParent(data) {
+            this.parent = data
         }
     }
     

@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <Nav />
-        <router-view/>
+        <Nav :render-key="this.renderKey" :categorys="categorys" @change_category="change_category" :key="renderKey" @component-reload="forceRerender"/>
+        <router-view :category="category"/>
         <Footer />
     </div>
 </template>
@@ -17,6 +17,28 @@
     import Footer from "./components/Footer"
 
     export default {
-        components: {Nav, Footer}
+        components: {Nav, Footer},
+        data() {
+            return {
+                renderKey: 0,
+                categorys: [],
+                category: "",
+            }
+        },
+        created() {
+            this.loadCategorys()
+        },
+        methods: {
+            forceRerender() {
+                this.renderKey++
+            },
+            async loadCategorys() {
+                this.categorys = await fetch(`${this.$store.getters.getServerUrl}/category/`
+                ).then(response => response.json())
+            },
+            change_category(categoryName) {
+                this.category = categoryName
+            },
+        },
     }
 </script>
