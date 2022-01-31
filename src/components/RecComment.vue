@@ -7,7 +7,7 @@
                 <span class="pl-2 date-comment">{{ new Date(comment.date_create).toDateString()  }}</span>
             </div>
             <p class="mt-2 editContent">{{ comment.content }}</p>
-            <a href="#formComment" @click="addParent(comment.id)">Ответить</a>
+            <a href="#flag" @click="addParent(comment.id)">Ответить</a>
             <RecComment v-for="child in comment.children" v-bind:comment="child" :key="child.id" @addParent="addParent"/>
         </div>
     </div>

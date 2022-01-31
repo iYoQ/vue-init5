@@ -29,6 +29,7 @@
 
 <script>
 import Pagination from "../components/Pagination"
+import { api } from "../http"
 export default {
     name: "UsersList",
     components: { Pagination },
@@ -45,17 +46,13 @@ export default {
     },
     methods: {
         async loadUsers(pageNumber) {
-            this.users = await fetch(`${this.$store.getters.getServerUrl}/users/?page=${pageNumber}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }
-            ).then(response => response.json()
+            this.users = await api.get(`/users/?page=${pageNumber}`
             ).then(response => {
-                this.total = response.links.count
-                return response.results
+                this.total = response.data.links.count
+                return response.data.results
+            }
+            ).catch(error => {
+                console.log(error)
             })
         },
         goToUser(username) {

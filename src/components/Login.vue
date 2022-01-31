@@ -29,6 +29,8 @@
 </template>
 
 <script>
+    import { api } from "../http"
+
     export default {
         name: "Login",
         data() {
@@ -50,59 +52,45 @@
                 this.signIn = false
                 this.signUp = true
             },
-            setLogin() {
-                let data = {
+            async setLogin() {
+                api.defaults.headers.common['Authorization'] = ''
+
+                await api.post(`/auth/jwt-create/`, {
                     email: this.email,
                     password: this.password
                 }
-                fetch(`${this.$store.getters.getServerUrl}/auth/jwt-create/`,
-                {
-                    credentials: 'include',
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                        
-                    },
-                    body: JSON.stringify(data)
-                }
-                ).then(response => response.json()
                 ).then(response => {
-                    if(!response.access){
-                        alert(JSON.stringify(response))
-                        return
-                    }
-                    localStorage.setItem("jwt", response.access)
+                    const access = response.data.access
+                    const refresh = response.data.refresh
+
+                    this.$store.commit('setAccess', access)
+                    this.$store.commit('setRefresh', refresh)
+
+                    localStorage.setItem('access', access)
+                    localStorage.setItem('refresh', refresh)
+
+                    api.defaults.headers.common['Authorization'] = 'Bearer ' + access
                     this.$router.go()
+                }
+                ).catch(error => {
+                    console.log(error)
                 })
             },
             async setRegistration() {
-                let data = {
+                await api.post('/users/registration/', {
                     username: this.username,
                     email: this.email,
                     password: this.password
                 }
-                await fetch(`${this.$store.getters.getServerUrl}/users/registration/`,
-                {
-                    credentials: 'include',
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                        
-                    },
-                    body: JSON.stringify(data)
-                }
-                ).then(response => response.json()
                 ).then(response => {
-                    alert(JSON.stringify(response))
-                    if(typeof response === "object"){
-                        this.clearForm()
-                        return 
-                    }
+                    alert(response.data)
                     this.$emit("show_login")
-                    this.$router.push({ name: "Activation"})
+                    this.$router.push( {name: "Activation"} )
                 }
-                ).catch(err => {
-                    alert(JSON.stringify(err))
+                ).catch(error => {
+                    console.log(error)
+                    this.clearForm()
+                    return
                 })
             },
             clearForm() {

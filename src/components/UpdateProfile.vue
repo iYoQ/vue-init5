@@ -24,7 +24,7 @@
 </template>
 
 <script>
-
+import { api } from "../http"
 export default {
     name: "UpdateProfile",
     props: ['user'],
@@ -54,29 +54,20 @@ export default {
             reader.readAsDataURL(file);
         },
         async sendUpdate() {
-            let data = {
+            await api.patch(`/users/${this.user.username}/`, {
                 avatar: this.new_image,
                 description: this.new_description,
                 birth_date: this.new_birth,
                 gender: this.new_gender
             }
-            await fetch(`${this.$store.getters.getServerUrl}/users/${this.user.username}/`,
-            {
-                credentials: 'include',
-                method: "PATCH",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-                },
-                body: JSON.stringify(data)
-            }
-            ).then(response => response.ok ? response.json() : Promise.reject(response)
             ).then(response => {
                 this.$emit('reload_page')
                 this.$emit('back')
             }
-            ).catch(err => alert(err.statusText))
-        },
+            ).catch(error => {
+                console.log(error)
+            })
+        }
     },
 };
 </script>

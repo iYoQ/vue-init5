@@ -49,7 +49,6 @@ h6 {
 
 p {
     font-size: 0.9em;
-    color: #8c9398;
     line-height: 2em;
     letter-spacing: 1px;
 }
@@ -76,7 +75,11 @@ ol {
     word-wrap: break-word;
 }
 
-
+.customBtn {
+    color: #fff;
+    background-color: #ff4c4c;
+    border-color: #ff4c4c;
+}
 
 
 /*--/header --*/
@@ -892,7 +895,6 @@ ul.w3layouts-box-list li {
 
 .desc1-right h5 {
     font-size: 1.3em;
-    color: #62676b;
     line-height: 1.5em;
     -webkit-text-stroke: 0.2px;
     font-weight: 400;
@@ -1188,11 +1190,11 @@ ul.w3layouts-icons li a {
 
 .footer-right {
     border-left: 1px solid #ddd;
-    padding: 3em 0em 3em 2em;
+    padding: 1em 0em 0em 2em;
 }
 
 .footer-grid_section_w3layouts {
-    padding: 3em 0;
+    padding: 1em 0;
 }
 
 .contact-info a {

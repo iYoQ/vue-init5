@@ -95,6 +95,7 @@
 import RecComment from "../components/RecComment";
 import Pagination from "../components/Pagination"
 import UpdateProfile from "../components/UpdateProfile";
+import { api } from "../http"
 export default {
     
     name: "Profile",
@@ -120,11 +121,12 @@ export default {
     },
     methods: {
         async loadUser() {
-            this.user = await fetch(
-                `${this.$store.getters.getServerUrl}/users/${this.username}`
-            ).then((response) => response.json()
+            this.user = await api.get(`/users/${this.username}`
             ).then(response => {
-                return response
+                return response.data
+            }
+            ).catch(error => {
+                console.log(error)
             })
         },
         btnShowComments() {
@@ -148,21 +150,20 @@ export default {
             this.showComments = false
         },
         async loadComments(pageNumber) {
-            this.comments = await fetch(
-                `${this.$store.getters.getServerUrl}/users/${this.username}/comments?page=${pageNumber}`
-            ).then(response => response.json()
+            this.comments = await api.get(`/users/${this.username}/comments?page=${pageNumber}`
             ).then(response => {
-                this.totalComments = response.links.count
-                return response.results
+                this.totalComments = response.data.links.count
+                return response.data.results
             })
         },
         async loadArticles(pageNumber) {
-            this.articles = await fetch(
-                `${this.$store.getters.getServerUrl}/users/${this.username}/articles?page=${pageNumber}`
-            ).then(response => response.json()
+            this.articles = await api.get(`/users/${this.username}/articles?page=${pageNumber}`
             ).then(response => {
-                this.totalArticles = response.links.count
-                return response.results
+                this.totalArticles = response.data.links.count
+                return response.data.results
+            }
+            ).catch(error => {
+                console.log(error)
             })
         },
         goTo(id) {

@@ -12,17 +12,18 @@
                             <li><a @click="goToUsers()" href="">Пользователи</a></li>
                             <li>
                                 <label for="drop-2" class="toggle">Категории <span class="fa fa-angle-down" aria-hidden="true" ></span></label>
-                                <a class="category">Категории <span class="fa fa-angle-down" aria-hidden="true"></span></a>
+                                <a class="nav-menu">Категории <span class="fa fa-angle-down" aria-hidden="true"></span></a>
                                 <input type="checkbox" id="drop-2">
                                 <ul>
                                     <li v-for="category in categorys" :key="category.id">
-                                        <a @click="updateCategory(category.id)">{{ category.name }}</a>
+                                        <a @click="goToCategory(category.id)">{{ category.name }}</a>
                                     </li>
                                 </ul>
                             </li>
+                            <li v-if="$store.state.access" @click="goToCreateArticle()" class="pl-3 border border-bottom-0"><a class="nav-menu">Добавить статью</a></li>
                         </ul>
-                        <div v-if="jwt" class="mt-3">
-                            <a @click="goProfile()" class="profile">{{ this.username }} </a>
+                        <div v-if="$store.state.access" class="mt-3">
+                            <a @click="goProfile()" class="profile">{{ this.user.username }} </a>
                             <a @click="logout()" class="profile">Выход</a>
                         </div>
                         <div v-else class="mt-3"><a class="loginBtn" @click="goLogin()">Вход</a></div>
@@ -35,58 +36,55 @@
 
 <script>
 import Login from "./Login"
+import { api } from "../http"
     export default {
         name: "Nav",
         components: { Login },
         props: ["render-key", "categorys"],
         data() {
             return {
-            jwt: localStorage.getItem('jwt'),
-            username : null,
-            loginView: false,
+                user: {},
+                loginView: false,
             }
         },
         created() {
-            if(this.jwt) {
+            if(this.$store.state.access) {
                 this.setUser()
             }
         },
         methods: {
             async setUser() {
-                this.username = await fetch(`${this.$store.getters.getServerUrl}/users/me/`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-                        
-                    },
-                }
-                ).then(response => response.json()
+                this.user = await api.get('/users/me/',
                 ).then(response => {
-                    localStorage.setItem("username", response.username)
-                    return response.username
+                    localStorage.setItem('username', response.data.username)
+                    return response.data
+                }
+                ).catch(error => {
+                    console.log(error)
                 })
             },
             goLogin() {
                 this.loginView = this.loginView == false ? true : false
             },
             goProfile() {
-                this.$router.push({name: "Profile", params: {username: this.username} })
+                this.$router.push({name: "Profile", params: {username: this.user.username} })
             },
             goToUsers() {
                 this.$router.push( {name: 'UsersList'} )
             },
             logout() {
-                ['jwt', 'username'].forEach((item) => localStorage.removeItem(item));
+                ['access', 'refresh', 'username'].forEach((item) => localStorage.removeItem(item));
                 this.$router.go()
+            },
+            goToCategory(category) {
+                this.$router.push( {name: 'Category', params: {category: category}} )
+            },
+            goToCreateArticle() {
+                this.$router.push( {name: 'CreateArticle', params: {categorys: this.categorys}} )
             },
             forceRerender() {
                 this.$emit('component-reload')
             },
-            updateCategory(id) {
-                this.$emit('change_category', id)
-            }
         },
     }
 </script>
@@ -129,7 +127,7 @@ import Login from "./Login"
     .profile {
         cursor: pointer;
     }
-    .category {
+    .nav-menu {
         color:white !important;
         font-weight: bold !important;
     }

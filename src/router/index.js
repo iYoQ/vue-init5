@@ -6,6 +6,7 @@ import Activation from "../components/Activation"
 import Profile from "../views/Profile"
 import UsersList from "../views/UsersList"
 import Category from "../views/Category"
+import CreateArticle from "../views/CreateArticle"
 
 Vue.use(VueRouter)
 
@@ -16,16 +17,23 @@ const routes = [
         component: Home,
     },
     {
-        path: '/articles/:id',
+        path: '/article/:id',
         name: 'Single',
         component: Single,
         props: true,
     },
     {
-        path: '/articles/category/:category',
+        path: '/category/:category',
         name: 'Category',
         component: Category,
         props: true,
+    },
+    {
+        path: '/create',
+        name: 'CreateArticle',
+        component: CreateArticle,
+        props: true,
+        meta: {requiresAuth: true}
     },
     {
         path: '/auth/activation',
@@ -46,14 +54,6 @@ const routes = [
         props: true,
     },
     {
-        path: '/about',
-        name: 'About',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    },
-    {
         path: '*',
         redirect: '/all'
     },
@@ -63,5 +63,33 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
+
+router.beforeEach((to, from, next) => {
+    if(!to.matched[0]){
+      router.push({ name: 'Home' });
+    }
+    else if(to.meta.requiresAuth){		
+        localStorage.getItem('access') ? next() : router.push({ name: 'Home' })
+    }
+    else{
+      next();
+    }
+})
+
+const originalPush = router.push
+router.push = function push(location, onResolve, onReject)
+{
+    if (onResolve || onReject) {
+        return originalPush.call(this, location, onResolve, onReject)
+    }
+ 
+    return originalPush.call(this, location).catch((err) => {
+        if (VueRouter.isNavigationFailure(err)) {
+            return err
+        }
+   
+        return Promise.reject(err)
+    })
+}
 
 export default router

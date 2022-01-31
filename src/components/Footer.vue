@@ -13,10 +13,6 @@
                         </h2>
                         <p class="editContent">
                             Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Quia perspiciatis non maxime illo
-                            reprehenderit voluptate et, natus magni impedit
-                            dolor laborum dignissimos, id ad corrupti placeat
-                            maiores, eum sit voluptas?
                         </p>
                         <h4 class="sub-con-fo ad-info my-4 editContent"
                             >Catch on Social</h4
@@ -78,87 +74,38 @@
                         </div>
                         <div class="row mt-lg-4 bottom-w3layouts-sec-nav mx-0">
                             <div class="col-md-4 footer-grid_section_w3layouts">
-                                <h3
-                                    class="footer-title text-uppercase editContent mb-lg-4 mb-3"
-                                    >Разделы</h3
-                                >
+                                <h3 class="footer-title text-uppercase editContent mb-lg-2 mb-3">Разделы</h3>
                                 <ul class="list-unstyled w3layouts-icons">
                                     <li>
-                                        <a href="index.html" class="editContent"
-                                            >Главная</a
-                                        >
+                                        <a href="index.html" class="editContent">Главная</a>
                                     </li>
                                     <li>
-                                        <a href="about.html" class="editContent"
-                                            >Категории</a
-                                        >
+                                        <a href="about.html" class="editContent">Новости</a>
                                     </li>
                                     <li>
-                                        <a
-                                            href="contact.html"
-                                            class="editContent"
-                                            >Контакты</a
-                                        >
+                                        <a class="editContent">Пользователи</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-4 footer-grid_section_w3layouts">
                                 <div class="agileinfo_social_icons">
-                                    <h3
-                                        class="footer-title text-uppercase editContent mb-lg-4 mb-3"
-                                        >Pages</h3
-                                    >
+                                    <h3 class="footer-title text-uppercase editContent mb-lg-2 mb-3">Pages</h3>
                                     <ul class="list-unstyled w3layouts-icons">
                                         <li>
-                                            <a href="#" class="editContent"
-                                                >About Us</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#" class="editContent"
-                                                >About Us</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#" class="editContent"
-                                                >About Us</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#" class="editContent"
-                                                >About Us</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#" class="editContent"
-                                                >About Us</a
-                                            >
+                                            <a href="#" class="editContent">About Us</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            <div
-                                class="col-md-4 footer-grid_section_w3layouts my-md-0 my-5"
-                            >
-                                <h3
-                                    class="footer-title text-uppercase text-wh mb-lg-4 mb-3 editContent"
-                                    >Contact Info</h3
-                                >
+                            <div class="col-md-4 footer-grid_section_w3layouts my-md-0 my-5">
+                                <h3 class="footer-title text-uppercase text-wh mb-lg-2 mb-3 editContent">Contact Info</h3>
                                 <div class="contact-info">
                                     <div class="footer-address-inf my-4">
-                                        <h4 class="ad-info mb-2 editContent"
-                                            >Email
-                                        </h4>
-                                        <p class="editContent"
-                                            ><a href="mailto:info@example.com"
-                                                >info@example.com</a
-                                            ></p
-                                        >
+                                        <h4 class="ad-info mb-2 editContent">Email</h4>
+                                        <p class="editContent"><a href="mailto:info@example.com">info@example.com</a></p>
                                     </div>
                                     <div class="footer-address-inf">
-                                        <h4 class="ad-info mb-2 editContent"
-                                            >Location</h4
-                                        >
+                                        <h4 class="ad-info mb-2 editContent">Location</h4>
                                         <p class="editContent">New York City</p>
                                     </div>
                                 </div>

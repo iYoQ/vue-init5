@@ -1,6 +1,6 @@
 <template>
-    <div class="cols">
-        <div class="single-form-left">
+    <div class="cols" id="flag">
+        <div v-if="$store.state.access" class="single-form-left">
             <div class="contact-single">
                 <h3 class="editContent">Оставить комментарий</h3>
                 <form action="#" method="get" class="mt-4" id="formComment">
@@ -9,7 +9,7 @@
                         <textarea class="form-control border" rows="5" id="contactcomment" required="" 
                         v-model="content"></textarea>
                     </div>
-                    <button type="button" class="mt-3 btn btn-success btn-block py-3" @click="sendComment()">Отправить</button>
+                    <button type="button" class="mt-3 btn customBtn btn-block py-3" @click="sendComment()">Отправить</button>
                 </form>
             </div>
         </div>
@@ -19,6 +19,7 @@
 
 <script>
 import RecComment from "./RecComment";
+import { api } from "../http"
 export default {
     name: "RootComment",
     props: ['comments', 'article'],
@@ -33,22 +34,16 @@ export default {
     },
     methods: {
         async sendComment() {
-            let data = {
+            await api.post(`/articles/${this.article}/comments/`, {
                 content: this.content,
                 parent: this.parent
             }
-            await fetch(`${this.$store.getters.getServerUrl}/articles/${this.article}/comments/`,
-            {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-                },
-                body: JSON.stringify(data)
-            }
-            ).then((response) => {
+            ).then(response => {
                 this.clearForm()
-                this.$emit('reload_page')
+                this.$emit('reload_page', this.article)
+            }
+            ).catch(error => {
+                console.log(error)
             })
         },
         clearForm() {

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+    import { api } from "../http"
     export default {
         name: "Activation",
         data() {
@@ -24,26 +25,16 @@
             }
         },
         methods: {
-            async setActivation() {
-                let data = {
+            async setActivation(){
+                await api.post('/users/activation/', {
                     secret_code: this.code
                 }
-                await fetch(`${this.$store.getters.getServerUrl}/users/activation/`,
-                {
-                    credentials: 'include',
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                        
-                    },
-                    body: JSON.stringify(data)
-                }
-                ).then(response => response.json()
                 ).then(response => {
-                    alert(JSON.stringify(response))
-                    if(typeof response === "object") 
-                        return
-                    this.$router.push({ name: "Login"})
+                    alert(response.data)
+                    this.$router.push( {name: 'Home'} )
+                }
+                ).catch(error => {
+                    console.log(error)
                 })
             }
         },

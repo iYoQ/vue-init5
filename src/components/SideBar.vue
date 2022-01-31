@@ -1,5 +1,5 @@
 <template>
-    <div class="side-bar col-lg-9 side">
+    <div class="side-bar d-flex flex-column side">
         <div class="search-bar w3layouts-newsletter">
             <h3 class="sear-head editContent">Поиск</h3>
             <form action="#" method="post" class="d-flex">
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { api } from "../http"
 export default {
     name: "SideBar",
     data() {
@@ -30,11 +31,14 @@ export default {
     },
     methods: {
         async loadTopListArticles() {
-            this.listTopArticles = await fetch(
-                `${this.$store.getters.getServerUrl}/articles/top`
-            ).then((response) => response.json());
+            this.listTopArticles = await api.get('/articles/top'
+            ).then(response => {
+                return response.data
+            }
+            ).catch(error => {
+                console.log(error)
+            })
         },
-        
         goTo(id) {
             this.$router.push({ name: "Single", params: {id: id} })
         },

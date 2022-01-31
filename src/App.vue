@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <Nav :render-key="this.renderKey" :categorys="categorys" @change_category="change_category" :key="renderKey" @component-reload="forceRerender"/>
-        <router-view :category="category"/>
+        <Nav :render-key="this.renderKey" :categorys="categorys" :key="renderKey" @component-reload="forceRerender"/>
+        <router-view />
         <Footer />
     </div>
 </template>
@@ -15,6 +15,7 @@
 <script>
     import Nav from "./components/Nav";
     import Footer from "./components/Footer"
+    import { api } from "./http"
 
     export default {
         components: {Nav, Footer},
@@ -22,8 +23,22 @@
             return {
                 renderKey: 0,
                 categorys: [],
-                category: "",
             }
+        },
+        beforeCreate() {
+            this.$store.commit('initializeStore')
+
+            const access = this.$store.state.access
+
+            if(access) {
+                api.defaults.headers.common['Authorization'] = 'Bearer ' + access
+            }
+            else {
+                api.defaults.headers.common['Authorization'] = ''
+            }
+        },
+        mounted() {
+
         },
         created() {
             this.loadCategorys()
@@ -33,11 +48,13 @@
                 this.renderKey++
             },
             async loadCategorys() {
-                this.categorys = await fetch(`${this.$store.getters.getServerUrl}/category/`
-                ).then(response => response.json())
-            },
-            change_category(categoryName) {
-                this.category = categoryName
+                this.categorys = await api.get('/category/'
+                ).then(response => {
+                    return response.data
+                }
+                ).catch(error => {
+                    console.log(error)
+                })
             },
         },
     }
