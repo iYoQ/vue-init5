@@ -8,7 +8,7 @@
                         </div>
                         <ul class="menu mt-3">
                             <li class="active"><a href="/">Главная</a></li>
-                            <li class="news"><a href="">Новости</a></li>
+                            <li><a @click="goToNews()" href="">Новости</a></li>
                             <li><a @click="goToUsers()" href="">Пользователи</a></li>
                             <li>
                                 <label for="drop-2" class="toggle">Категории <span class="fa fa-angle-down" aria-hidden="true" ></span></label>
@@ -24,7 +24,7 @@
                         </ul>
                         <div v-if="$store.state.access" class="mt-3">
                             <a @click="goProfile()" class="profile">{{ this.user.username }} </a>
-                            <a @click="logout()" class="profile">Выход</a>
+                            <a @click="logout()" class="logout">Выход</a>
                         </div>
                         <div v-else class="mt-3"><a class="loginBtn" @click="goLogin()">Вход</a></div>
                     </nav>
@@ -57,6 +57,7 @@ import { api } from "../http"
                 this.user = await api.get('/users/me/',
                 ).then(response => {
                     localStorage.setItem('username', response.data.username)
+                    this.$store.commit('setRole', response.data.is_staff)
                     return response.data
                 }
                 ).catch(error => {
@@ -67,7 +68,7 @@ import { api } from "../http"
                 this.loginView = this.loginView == false ? true : false
             },
             goProfile() {
-                this.$router.push({name: "Profile", params: {username: this.user.username} })
+                this.$router.push({name: 'Profile', params: {username: this.user.username} })
             },
             goToUsers() {
                 this.$router.push( {name: 'UsersList'} )
@@ -76,11 +77,16 @@ import { api } from "../http"
                 ['access', 'refresh', 'username'].forEach((item) => localStorage.removeItem(item));
                 this.$router.go()
             },
-            goToCategory(category) {
-                this.$router.push( {name: 'Category', params: {category: category}} )
+            goToCategory(categoryID) {
+                this.$store.commit('setCategory', categoryID)
+                this.$router.push( {name: 'Home'} )
+                this.$root.$emit('Home', this.$store.state.search, categoryID)
             },
             goToCreateArticle() {
                 this.$router.push( {name: 'CreateArticle', params: {categorys: this.categorys}} )
+            },
+            goToNews() {
+                this.$router.push( {name: 'News'} )
             },
             forceRerender() {
                 this.$emit('component-reload')
@@ -126,10 +132,53 @@ import { api } from "../http"
     }
     .profile {
         cursor: pointer;
+        font-weight: 700;
+        text-decoration: none;
+        color: white !important;
+        position: relative;
+        padding: 5px 10px;
+        border: 1px solid;
+        border-image: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+        border-image-slice: 1;
+        overflow: hidden;
+        letter-spacing: 2px;
+        transition: .8s cubic-bezier(.165, .84, .44, 1);
+    }
+    .profile:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 0;
+        width: 100%;
+        z-index: -1;
+        color: white;
+        background: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+        transition: .8s cubic-bezier(.165, .84, .44, 1);
+    }
+    .profile:hover {
+        background: rgba(255, 255, 255, 0);
+    }
+    .profile:hover:before {
+        bottom: 0%;
+        top: auto;
+        height: 100%;
+    }
+    .logout {
+        cursor: pointer;
+        font-weight: 700;
+        padding: 5px 10px;
+        border: 1px solid;
+        border-image: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+        border-image-slice: 1;
+        text-transform: uppercase;
+        background-color: #1e272e;
+        color: white !important;
     }
     .nav-menu {
         color:white !important;
         font-weight: bold !important;
+        border-image: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+        border-image-slice: 1;
     }
-
 </style>

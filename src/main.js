@@ -7,6 +7,8 @@ import CKEditor from 'ckeditor4-vue';
 
 Vue.use( CKEditor );
 
+
+
 Vue.config.productionTip = false
 
 new Vue({

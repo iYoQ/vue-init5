@@ -12,8 +12,9 @@
                     <div class="cont_text_inputs">
                         <input type="text" class="input_form_sign active_inp" :class="{d_block: signUp===true}" v-model="username" placeholder="Username" />
                         <input type="text" class="input_form_sign d_block active_inp" v-model="email" placeholder="Email" name="email" />
-                        <input type="password" class="input_form_sign d_block  active_inp" v-model="password" placeholder="Password" name="pass" />  
-                        <a href="#" class="link_forgot_pass" :class="{d_block: signIn===true}">Forgot Password ?</a>    
+                        <button @click="restorePassword()" v-if="restorePass" class="btn_restore">RESTORE</button>
+                        <input type="password" class="input_form_sign active_inp" :class="{d_block: restorePass===false}" v-model="password" placeholder="Password" name="pass" />  
+                        <a @click="showRestorePassword()" class="link_forgot_pass" :class="{d_block: signIn===true}">Forgot Password ?</a> 
                         <div class="terms_and_cons d_none" :class="{d_block: signUp===true}">
                             <p><input type="checkbox" name="terms_and_cons" /> <label for="terms_and_cons">Accept  Terms and Conditions.</label></p>
                         </div>
@@ -40,6 +41,7 @@
                 username: null,
                 signIn: true,
                 signUp: false,
+                restorePass: false,
             }
         },
         methods: {
@@ -47,10 +49,19 @@
             showSignIn() {
                 this.signIn = true
                 this.signUp = false
+                this.restorePass = false
+                this.clearForm()
             },
             showSignUp() {
                 this.signIn = false
                 this.signUp = true
+                this.restorePass = false
+                this.clearForm()
+            },
+            showRestorePassword() {
+                this.restorePass = true
+                this.signIn = false
+                this.clearForm()
             },
             async setLogin() {
                 api.defaults.headers.common['Authorization'] = ''
@@ -74,6 +85,7 @@
                 }
                 ).catch(error => {
                     console.log(error)
+                    alert('invalid input')
                 })
             },
             async setRegistration() {
@@ -88,9 +100,19 @@
                     this.$router.push( {name: "Activation"} )
                 }
                 ).catch(error => {
-                    console.log(error)
+                    var key = Object.keys(error.response.data)
+                    alert(error.response.data[key])
                     this.clearForm()
                     return
+                })
+            },
+            async restorePassword() {
+                await api.post('/users/restore_password/', {
+                    email: this.email
+                }
+                ).then(response => {
+                    alert(response.data)
+                    this.$emit("show_login")
                 })
             },
             clearForm() {
@@ -220,6 +242,21 @@
         float: left;
     }
     .btn_sign {
+        background: rgba(255,64,88,0.74);
+        box-shadow: 0px 2px 20px 2px rgba(255,114,132,0.50);
+        border-radius: 8px;
+        padding: 15px 30px;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        position: relative;  
+        float: left;
+        margin-left: 100px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+    .btn_restore {
         background: rgba(255,64,88,0.74);
         box-shadow: 0px 2px 20px 2px rgba(255,114,132,0.50);
         border-radius: 8px;

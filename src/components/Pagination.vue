@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="totalPages>1">
         <ul class="pagination justify-content-center">
             <li @click="prevButton(currentPage)" :class="{disabled: currentPage===1}" class="page-item"><button class="page-link">Previous</button></li>
             <li v-for="page in totalPages" :key="page" class="page-item" :class="{active: currentPage === page}">
@@ -13,21 +13,22 @@
 <script>
     export default {
         name: "Pagination",
-        props: ['total', 'page_size',],
+        props: ['total', 'page_size', 'category'],
         data() {
             return {
                 currentPage: 1,
+                search: this.$store.state.search || ''
             }
         },
         computed: {
             totalPages() {
                 return Math.ceil(this.total / this.page_size)
-            }
+            },
         },
         methods: {
             changePage(pageNumber) {
                 this.currentPage = pageNumber
-                this.$emit('page-changed', pageNumber)
+                this.$emit('page-changed', pageNumber, this.search)
             },
             nextButton(pageNumber) {
                 if(pageNumber < this.totalPages){

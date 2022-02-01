@@ -1,5 +1,5 @@
 <template>
-    <CreatePost :categorys="categorys" @send_post="sendArticle"/>
+    <CreatePost :isNews="isNews" @send_post="sendNews"/>
 </template>
 
 <script>
@@ -7,19 +7,21 @@ import CreatePost from "../components/CreatePost"
 import { api } from "../http"
 
 export default {
-    name: "CreateArticle",
+    name: "CreateNews",
     components: { CreatePost },
-    props: ['categorys'],
+    data() {
+        return {
+            isNews: true
+        }
+    },
     methods: {
-        async sendArticle(headline, content, category){
+        async sendNews(headline, content){
             const formData = {
                 headline: headline,
-                category: category,
                 content: content,
             }
-            await api.post('/articles/', formData
+            await api.post('/news/', formData
             ).then(response => {
-                // this.$root.$emit('Home', this.$store.state.search, categoryID)
                 this.$router.push( {name: "Home"} )
             }
             ).catch(error => {

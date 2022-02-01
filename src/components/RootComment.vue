@@ -22,10 +22,8 @@ import RecComment from "./RecComment";
 import { api } from "../http"
 export default {
     name: "RootComment",
-    props: ['comments', 'article'],
-    components: {
-        RecComment
-    },
+    props: ['comments', 'post_id', 'path'],
+    components: { RecComment },
     data() {
         return {
             content: '',
@@ -34,13 +32,13 @@ export default {
     },
     methods: {
         async sendComment() {
-            await api.post(`/articles/${this.article}/comments/`, {
+            await api.post(`/${this.path}/${this.post_id}/comments/`, {
                 content: this.content,
                 parent: this.parent
             }
             ).then(response => {
                 this.clearForm()
-                this.$emit('reload_page', this.article)
+                this.$emit('reload_page', this.post)
             }
             ).catch(error => {
                 console.log(error)

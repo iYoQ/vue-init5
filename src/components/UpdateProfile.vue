@@ -16,6 +16,9 @@
             <span class="span-user">День рождения:</span><input v-model="new_birth" class="li-user">
             <span class="span-user">Пол:</span><input v-model="new_gender" class="li-user">
             <span class="span-user">Описание:</span><input v-model="new_description" class="li-user">
+            <div v-if="$store.state.is_admin" >
+                <input type="checkbox" id="newsmaker" v-model="newsmaker"><span class="span-user">newsmaker?</span>
+            </div>
             <button type="button" class="mt-3 btn btn-block py-3" @click="sendUpdate()">Обновить</button>
             <button type="button" class="mt-3 btn btn-block py-3" @click="$emit('back')">Отмена</button>
         </div>
@@ -33,7 +36,8 @@ export default {
             new_image: this.user.avatar,
             new_birth: this.user.birth_date,
             new_gender: this.user.gender,
-            new_description: this.user.description
+            new_description: this.user.description,
+            newsmaker: this.user.is_newsmaker
         }
     },
     methods: {
@@ -54,18 +58,25 @@ export default {
             reader.readAsDataURL(file);
         },
         async sendUpdate() {
-            await api.patch(`/users/${this.user.username}/`, {
-                avatar: this.new_image,
+            const updateData = {
                 description: this.new_description,
                 birth_date: this.new_birth,
                 gender: this.new_gender
             }
+            if(this.new_image !== this.user.avatar){
+                updateData['avatar'] = this.new_image
+            }
+            if(this.newsmaker !== this.user.is_newsmaker){
+                updateData['is_newsmaker'] = this.newsmaker
+            }
+            await api.patch(`/users/${this.user.username}/`, updateData
             ).then(response => {
-                this.$emit('reload_page')
+                this.$emit('reload_page', this.user.username)
                 this.$emit('back')
             }
             ).catch(error => {
-                console.log(error)
+                var key = Object.keys(error.response.data)
+                alert(error.response.data[key])
             })
         }
     },

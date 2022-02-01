@@ -7,6 +7,9 @@ const store = new Vuex.Store({
     state: {
         access: '',
         refresh: '',
+        is_admin: null,
+        search: '',
+        category: '',
     },
     mutations: {
         initializeStore(state) {
@@ -24,6 +27,15 @@ const store = new Vuex.Store({
         },
         setRefresh(state, refresh) {
             state.refresh = refresh
+        },
+        setRole(state, role) {
+            state.is_admin = role
+        },
+        setSearch(state, search) {
+            state.search = search
+        },
+        setCategory(state, category) {
+            state.category = category
         }
     },
     actions: {},

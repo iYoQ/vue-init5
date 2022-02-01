@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Single from "../views/Single.vue";
+import SingleArticle from "../views/SingleArticle"
+import SingleNews from "../views/SingleNews"
 import Activation from "../components/Activation"
 import Profile from "../views/Profile"
 import UsersList from "../views/UsersList"
-import Category from "../views/Category"
 import CreateArticle from "../views/CreateArticle"
+import News from "../views/News"
+import CreateNews from "../views/CreateNews"
 
 Vue.use(VueRouter)
 
@@ -15,17 +17,18 @@ const routes = [
         path: '/all',
         name: 'Home',
         component: Home,
-    },
-    {
-        path: '/article/:id',
-        name: 'Single',
-        component: Single,
         props: true,
     },
     {
-        path: '/category/:category',
-        name: 'Category',
-        component: Category,
+        path: '/article/:id',
+        name: 'SingleArticle',
+        component: SingleArticle,
+        props: true,
+    },
+    {
+        path: '/news/:id',
+        name: 'SingleNews',
+        component: SingleNews,
         props: true,
     },
     {
@@ -34,6 +37,19 @@ const routes = [
         component: CreateArticle,
         props: true,
         meta: {requiresAuth: true}
+    },
+    {
+        path: '/create_news',
+        name: 'CreateNews',
+        component: CreateNews,
+        props: true,
+        meta: {isNewsmaker: true}
+    },
+    {
+        path: '/news',
+        name: 'News',
+        component: News,
+        props: true,
     },
     {
         path: '/auth/activation',

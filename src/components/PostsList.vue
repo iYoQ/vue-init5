@@ -8,9 +8,9 @@
                             <div class="product-shoe-info editContent mt-lg-4">
                                 <div class="item-info-product">
                                     <h4 class="">
-                                        <a href="" @click="goTo(post.id)" class=" wrapped">{{ post.headline }}</a>
+                                        <a href="" @click="goToSingle(post.id)" class=" wrapped">{{ post.headline }}</a>
                                     </h4>
-                                    <small class="mark">{{ post.category }}</small>
+                                    <small v-if="'category' in post" class="mark">{{ post.category }}</small>
                                     <div class="product_price">
                                         <div class="grid-price">
                                             <span v-html="post.content" class="content"></span>
@@ -28,11 +28,11 @@
                     </div>
                 </div>
                 <div class="container-fluid py-md-4">
-                    <SideBar />
+                    <SideBar :page="page" @page-changed="changePage"/>
                 </div> 
             </div>
             <div class="container py-md-4">
-                <Pagination :total="total" :page_size="page_size" @page-changed="changePage"/>
+                <Pagination :page="page" :search="search" :total="total" :page_size="page_size" @page-changed="changePage"/>
             </div>
         </div>
     </section>
@@ -45,18 +45,18 @@ import Pagination from "../components/Pagination"
 export default {
     name: "PostsList",
     components: {SideBar, Pagination},
-    props: ['posts', 'page', 'total', 'page_size', 'category'],
+    props: ['posts', 'page', 'total', 'page_size', 'category', 'search'],
     data() {
         return {
 
         };
     },
     methods: {
-        goTo(id) {
-            this.$router.push({ name: "Single", params: {id: id} })
+        goToSingle(id) {
+            this.$emit('goToSingle', id)
         },
-        changePage(pageNumber) {
-            this.$emit('page_changed', pageNumber, this.category)
+        changePage(pageNumber, searchArticles) {
+            this.$emit('page_changed', pageNumber, searchArticles, this.category)
         },
     },
 };

@@ -7,7 +7,7 @@
                         <label for="headline">Заголовок:</label>
                         <input v-model="headline" type="text" class="form-control" placeholder="Введите название">
                     </div>
-                    <div class="form-group">
+                    <div v-if="!isNews" class="form-group">
                         <label for="category">Категория:</label>
                         <select v-model="category" class="form-control">
                             <option hidden disabled selected value>Выберите категорию</option>
@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group">
                         <label for="category">Текст:</label>
-                        <ckeditor v-model="content" tag-name="textarea" value=""></ckeditor>
+                        <ckeditor v-model="content" :config="editorConfig" tag-name="textarea" value=""></ckeditor>
                     </div>
                     <button type="submit" class="btn customBtn btn-block">Отправить</button>
                 </form>
@@ -28,7 +28,7 @@
 <script>
 export default {
     name: "CreatePost",
-    props: ['categorys'],
+    props: ['categorys', 'isNews'],
     created() {
         if(sessionStorage.getItem('categorys')) {
             this.categorys = JSON.parse(sessionStorage.getItem('categorys'))
@@ -42,8 +42,11 @@ export default {
     data() {
         return {
             headline: null,
-            category: null,
-            content: null
+            category: "",
+            content: null,
+            editorConfig : {
+               
+            },
         }
     },
     methods: {

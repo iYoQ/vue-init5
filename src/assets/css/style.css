@@ -81,6 +81,9 @@ ol {
     border-color: #ff4c4c;
 }
 
+img {
+    max-width:615px
+}
 
 /*--/header --*/
 

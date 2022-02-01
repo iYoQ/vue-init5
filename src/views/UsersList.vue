@@ -70,4 +70,7 @@ export default {
     .span-user {
         font-weight:bold;
     }
+    img {
+        cursor: pointer;
+    }
 </style>

@@ -3,9 +3,9 @@
         <div class="container py-md-4">
             <div class="d-flex">
                 <div class="left-ads-display col-lg-10">
-                    <div class="row">
+                    <div class="d-flex justify-content-center">
                         <div v-if="showInfo" class="desc1-right col-md-11 pl-lg-4">
-                            <div class="d-flex ">
+                            <div class="d-flex">
                                 <img :src="user.avatar" class="mr-3 img-fluid" alt=""/>
                                 <div class="align-self-center">
                                     <h5 class="wrapped">{{ user.username }}</h5>
@@ -24,67 +24,65 @@
                                 <li class="li-user"><span class="span-user">Описание:</span> {{ user.description}}</li>
                             </ul>
                         </div>
-                        <UpdateProfile v-if="showUpdate" :user="user" @back="btnShowInfo" @reload_page="loadUser()"/>
+                        <UpdateProfile v-if="showUpdate" :user="user" @back="btnShowInfo" @reload_page="loadUser"/>
                         <div v-if="showComments" >
                             <div class="media py-5 comments" v-for="comment in comments" :key="comment.id">
                                 <img :src="comment.avatar" class="mr-3 img-fluid" alt=""/>
                                 <div class="media-body mt-4">
                                     <div class="d-flex">
-                                        <a @click="goToPost(comment.post_url)"><h5 class="mt-0 editContent">{{ comment.author }}</h5></a>
+                                        <a ><h5 class="mt-0 editContent">{{ comment.author }}</h5></a>
                                         <span class="pl-2 date-comment">{{ new Date(comment.date_create).toDateString()  }}</span>
                                     </div>
                                     <p class="mt-2 editContent">{{ comment.content }}</p>
+                                    <a @click="goToPost(comment.post_url)"><span class="editContent source">Источник</span></a>
+                                    <hr>
                                 </div>
                             </div>
                             <div class="container py-md-4">
-                                    <Pagination :total="totalComments" :page_size="page_size" @page-changed="loadComments"/>
+                                <Pagination :total="totalComments" :page_size="15" @page-changed="loadComments"/>
                             </div>
                         </div>
                         <div v-if="showArticles" >
-                            <div class="ab-info-main py-md-5 py-4 editContent">
-                            <div class="container py-md-4">
-                                <div class="d-flex">
-                                    <div class="left-ads-display col-lg-9">
-                                        <div class="d-flex flex-column align-items-center">
-                                            <div v-for="article in articles" :key="article.id" class="col-md-10 product-men">
-                                                <div class="product-shoe-info editContent mt-lg-4">
-                                                    <div class="item-info-product">
-                                                        <h4 class="">
-                                                            <a @click="goTo(article.id)" class=" wrapped">{{ article.headline }}</a>
-                                                        </h4>
-                                                        <div class="product_price">
-                                                            <div class="grid-price">
-                                                                <span class="content">{{ article.content }}</span>
-                                                            </div>
+                            <div class="ab-info-main py-md-5 py-4 ">
+                                <div class="container py-md-4">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div v-for="article in articles" :key="article.id" class="col-md-10 product-men">
+                                            <div class="product-shoe-info editContent mt-lg-4">
+                                                <div class="item-info-product">
+                                                    <h4 class="">
+                                                        <a @click="goTo(article.id)" class=" wrapped">{{ article.headline }}</a>
+                                                    </h4>
+                                                    <div class="product_price">
+                                                        <div class="grid-price">
+                                                            <span v-html="article.content" class="content"></span>
                                                         </div>
-                                                        <div class="row pt-4">
-                                                            <div class="pl-2">Rating: {{ article.rating }}</div>
-                                                            <div class="pl-2">Views: {{ article.view_count }}</div>
-                                                            <div class="pl-2">Comments: {{ article.comments_count }}</div>
-                                                            <div class="pl-2">Date: {{ new Date(article.date_create).toDateString() }}</div>
-                                                        </div>
+                                                    </div>
+                                                    <div class="row pt-4">
+                                                        <div class="pl-2">Rating: {{ article.rating }}</div>
+                                                        <div class="pl-2">Views: {{ article.view_count }}</div>
+                                                        <div class="pl-2">Comments: {{ article.comments_count }}</div>
+                                                        <div class="pl-2">Date: {{ new Date(article.date_create).toDateString() }}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="container py-md-4">
+                                        <Pagination :total="totalArticles" :page_size="page_size" @page-changed="loadArticles"/>
+                                    </div>
                                 </div>
-                                <div class="container py-md-4">
-                                    <Pagination :total="totalArticles" :page_size="10" @page-changed="loadArticles"/>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                <div class="btnContainer d-flex flex-column">
-                    <a v-if="isUser()" class="update" @click="updateProfile()">Редактировать профиль</a>
-                    <br>
-                    <a @click="btnShowComments()">Комментарии</a>
-                    <a @click="btnShowArticles()">Статьи</a>
-                    <a @click="btnShowInfo()">Инфо</a>
-                </div>
+                    <div class="btnContainer d-flex flex-column">
+                        <a v-if="isUserOrAdmin()" class="update" @click="updateProfile()">Редактировать профиль</a>
+                        <br>
+                        <a @click="btnShowComments()">Комментарии</a>
+                        <a @click="btnShowArticles()">Статьи</a>
+                        <a @click="btnShowInfo()">Инфо</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,16 +110,16 @@ export default {
             showArticles: false,
             showComments: false,
             page: 1,
-            page_size: 15,
+            page_size: 30,
             showUpdate: false,
         };
     },
     created() {
-        this.loadUser()
+        this.loadUser(this.username)
     },
     methods: {
-        async loadUser() {
-            this.user = await api.get(`/users/${this.username}`
+        async loadUser(username) {
+            this.user = await api.get(`/users/${username}`
             ).then(response => {
                 return response.data
             }
@@ -172,10 +170,11 @@ export default {
         updateProfile() {
             this.showInfo = false
             this.showUpdate = true
-
+            this.showArticles = false,
+            this.showComments = false
         },
-        isUser() {
-            if(localStorage.getItem('username') != this.user.username){
+        isUserOrAdmin() {
+            if(!this.$store.state.is_admin && (localStorage.getItem('username') != this.user.username)){
                 return false
             }
             return true
@@ -184,6 +183,10 @@ export default {
             this.$router.push({path: url })
         },
     },
+    beforeRouteUpdate(to, from, next) {
+        this.loadUser(to.params.username)
+        next()
+    }
 };
 </script>
 
@@ -215,4 +218,9 @@ export default {
     .update {
         font-weight:bold;
     }
+    .source {
+        font-style: italic;
+        text-decoration: underline;
+    }
+
 </style>
