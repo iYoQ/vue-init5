@@ -85,6 +85,12 @@ img {
     max-width:615px
 }
 
+span p img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /*--/header --*/
 
 /* header */

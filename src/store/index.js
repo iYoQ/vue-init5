@@ -28,7 +28,7 @@ const store = new Vuex.Store({
         setRefresh(state, refresh) {
             state.refresh = refresh
         },
-        setRole(state, role) {
+        setIsAdmin(state, role) {
             state.is_admin = role
         },
         setSearch(state, search) {

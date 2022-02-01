@@ -52,24 +52,14 @@
                                 >By subscribing to our mailing list you will
                                 always get latest news and updates from us.</p
                             >
-                            <form
-                                action="#"
-                                method="post"
-                                class="w3layouts-newsletter"
-                            >
-                                <input
+                            <form @submit.prevent="subscribe(email)" class="w3layouts-newsletter">
+                                <input v-model="email"
                                     type="email"
                                     name="Email"
                                     class="editContent"
                                     placeholder="Enter your email..."
-                                    required=""
-                                />
-                                <button class="btn1 btn"
-                                    ><span
-                                        class="fa fa-paper-plane-o"
-                                        aria-hidden="true"
-                                    ></span
-                                ></button>
+                                    required=""/>
+                                <button class="btn1 btn"><span class="fa fa-paper-plane-o" aria-hidden="true"></span></button>
                             </form>
                         </div>
                         <div class="row mt-lg-4 bottom-w3layouts-sec-nav mx-0">
@@ -136,8 +126,29 @@
 </template>
 
 <script>
+import { api } from "../http"
 export default {
     name: "Footer",
+    data() {
+        return {
+            email: null
+        }
+    },
+    methods: {
+        async subscribe(emailOnSubscribe) {
+            await api.post('/subscribe/', {
+                email: emailOnSubscribe
+            }
+            ).then(response => {
+                console.log(Object.keys(response.data))
+                alert('success')
+            }
+            ).catch(error => {
+                alert('Error')
+                console.log(error)
+            })
+        }
+    }
 };
 </script>
 

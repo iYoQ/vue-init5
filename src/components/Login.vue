@@ -21,7 +21,7 @@
                     </div>
                     <div class="cont_btn">
                         <button v-if="signIn" type="button" class="btn_sign" @click="setLogin()">SIGN IN</button>
-                        <button  v-if="signUp" type="button" class="btn_sign" @click="setRegistration()">SIGN UP</button>
+                        <button v-if="signUp" type="button" class="btn_sign" @click="setRegistration()">SIGN UP</button>
                     </div>
                 </form>
             </div>

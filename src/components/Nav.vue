@@ -21,9 +21,10 @@
                                 </ul>
                             </li>
                             <li v-if="$store.state.access" @click="goToCreateArticle()" class="pl-3 border border-bottom-0"><a class="nav-menu">Добавить статью</a></li>
+                            <li v-if="user.is_newsmaker" @click="goToCreateNews()" class="pl-3 border border-bottom-0"><a class="nav-menu">Добавить новость</a></li>
                         </ul>
                         <div v-if="$store.state.access" class="mt-3">
-                            <a @click="goProfile()" class="profile">{{ this.user.username }} </a>
+                            <a @click="goProfile()" class="profile">{{ user.username }} </a>
                             <a @click="logout()" class="logout">Выход</a>
                         </div>
                         <div v-else class="mt-3"><a class="loginBtn" @click="goLogin()">Вход</a></div>
@@ -57,7 +58,7 @@ import { api } from "../http"
                 this.user = await api.get('/users/me/',
                 ).then(response => {
                     localStorage.setItem('username', response.data.username)
-                    this.$store.commit('setRole', response.data.is_staff)
+                    this.$store.commit('setIsAdmin', response.data.is_staff)
                     return response.data
                 }
                 ).catch(error => {
@@ -84,6 +85,9 @@ import { api } from "../http"
             },
             goToCreateArticle() {
                 this.$router.push( {name: 'CreateArticle', params: {categorys: this.categorys}} )
+            },
+            goToCreateNews() {
+                this.$router.push( {name: 'CreateNews'} )
             },
             goToNews() {
                 this.$router.push( {name: 'News'} )
